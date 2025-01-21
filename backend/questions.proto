@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package QuestionService;
+
+// Request for searching questions
+message SearchQuestionsRequest {
+  string query = 1;       // Search query
+  int32 page = 2;         // Page number for pagination
+  int32 pageSize = 3;     // Number of items per page
+}
+
+// Response for searching questions
+message SearchQuestionsResponse {
+  repeated Question questions = 1;  // List of questions
+  int32 totalQuestions = 2;         // Total number of matching questions
+}
+
+// Request for inserting questions
+message InsertQuestionsRequest {
+  repeated Question questions = 1;  // List of questions to insert
+}
+
+// Response for inserting questions
+message InsertQuestionsResponse {
+  string message = 1;               // Success message
+}
+
+// Main Question object
+message Question {
+  string id = 1;                  // MongoDB ObjectId (_id)
+  string type = 2;                // Type of the question (ANAGRAM, MCQ, READ_ALONG)
+  string anagramType = 3;         // Type of anagram (WORD, SENTENCE)
+  repeated Block blocks = 4;      // For ANAGRAM type questions
+  repeated Option options = 5;    // For MCQ type questions
+  string siblingId = 6;           // Reference to sibling question ID
+  string solution = 7;            // Solution text
+  string title = 8;               // Title of the question
+}
+
+// Block object (for ANAGRAM)
+message Block {
+  string text = 1;                  // Text of the block
+  bool showInOption = 2;            // Whether this block appears as an option
+  bool isAnswer = 3;                // Whether this block is part of the correct answer
+}
+
+// Option object (for MCQ)
+message Option {
+  string text = 1;                  // Text of the option
+  bool isCorrectAnswer = 2;         // Whether this option is the correct answer
+}
+
+// Define the gRPC service
+service QuestionService {
+  rpc searchQuestions (SearchQuestionsRequest) returns (SearchQuestionsResponse);
+  rpc insertQuestions (InsertQuestionsRequest) returns (InsertQuestionsResponse);
+}

@@ -131,11 +131,3 @@ This project demonstrates the implementation of a full-stack application with au
    - View, search, and manage questions.
 
 ---
-
-## Future Enhancements
-
-- Implement advanced filtering and sorting for questions.
-- Add more detailed analytics and metrics on user activity.
-- Enhance security features with OAuth and multi-factor authentication.
-
----

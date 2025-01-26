@@ -139,8 +139,3 @@ This project demonstrates the implementation of a full-stack application with au
 - Enhance security features with OAuth and multi-factor authentication.
 
 ---
-
-### Acknowledgments
-
-Special thanks to all contributors and the open-source community for supporting this project.
-

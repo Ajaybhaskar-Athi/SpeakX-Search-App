@@ -38,3 +38,6 @@ coverage/
 
 # Tailwind CSS configuration file (optional if sensitive)
 tailwind.config.js
+
+notes.txt
+

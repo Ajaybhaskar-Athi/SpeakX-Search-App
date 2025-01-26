@@ -29,3 +29,17 @@ const questions = require('./questions_transformed.json');
 
 
 console.log(questions.length);
+
+// const User = require('../models/User.model');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const fun=async()=>{
+    const plainPassword = 'examplePassword';
+
+const hashedPassword = await bcrypt.hash(plainPassword, 10);
+console.log(hashedPassword);
+const isMatch = await bcrypt.compare(plainPassword, hashedPassword);
+console.log('Match:', isMatch); // Should print true
+}
+fun();

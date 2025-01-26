@@ -2,6 +2,14 @@ syntax = "proto3";
 
 package QuestionService;
 
+
+// Define the gRPC service
+service QuestionService {
+  rpc searchQuestions (SearchQuestionsRequest) returns (SearchQuestionsResponse);
+  rpc insertQuestions (InsertQuestionsRequest) returns (InsertQuestionsResponse);
+}
+
+
 // Request for searching questions
 message SearchQuestionsRequest {
   string query = 1;       // Search query
@@ -48,10 +56,4 @@ message Block {
 message Option {
   string text = 1;                  // Text of the option
   bool isCorrectAnswer = 2;         // Whether this option is the correct answer
-}
-
-// Define the gRPC service
-service QuestionService {
-  rpc searchQuestions (SearchQuestionsRequest) returns (SearchQuestionsResponse);
-  rpc insertQuestions (InsertQuestionsRequest) returns (InsertQuestionsResponse);
 }

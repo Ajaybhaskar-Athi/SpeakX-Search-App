@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-// Define the schema for user authentication
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -22,7 +21,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// Hash the password before saving the user to the database
+// Hashing password before saving it to the mongo db server
 userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     const salt = await bcrypt.genSalt(10);
@@ -31,12 +30,11 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// Compare entered password with stored hashed password
+// compare genrated hash with stored hash
 userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Create the User model
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

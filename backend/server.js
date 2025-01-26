@@ -7,7 +7,7 @@ const { register, login } = require('./controllers/auth.controller.js');
 
 require("dotenv").config();
 
-const Question = require("./models/questions"); // Import the model
+const Question = require("./models/questions"); 
 
 const PROTO_PATH = "./questions.proto";
 const AUTH_PROTO_PATH = "./auth.proto";
@@ -30,15 +30,13 @@ const authPackageDefinition = protoLoader.loadSync(AUTH_PROTO_PATH, {
 
 const questionsProto = grpc.loadPackageDefinition(questionPackageDefinition).QuestionService;
 const authProto = grpc.loadPackageDefinition(authPackageDefinition).AuthService;
-// console.log(authProto);
-// MongoDB connection
-const mongoURI = process.env.SpeakXDB2; // or MongoDB URI string
+
+const mongoURI = process.env.SpeakXDB2; 
 mongoose
   .connect(mongoURI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// gRPC server methods
 async function searchQuestions(call, callback) {
   const { query, page = 1, pageSize = 10 } = call.request;
   try {
@@ -49,6 +47,7 @@ async function searchQuestions(call, callback) {
     const totalQuestions = await Question.countDocuments(filter);
 
     const formattedQuestions = questions.map((q) => ({
+      id: q._id.toString(),//newly added 
       type: q.type,
       title: q.title,
       solution: q.solution,
@@ -68,7 +67,6 @@ async function searchQuestions(call, callback) {
   }
 }
 
-// Insert questions
 async function insertQuestions(call, callback) {
   const questions = call.request.questions;
   console.log("Incoming questions:", JSON.stringify(questions, null, 2));
@@ -76,7 +74,7 @@ async function insertQuestions(call, callback) {
   if (questions && questions.length > 0) {
     try {
       const formattedQuestions = questions.map((q) => ({
-        _id: new mongoose.Types.ObjectId(), // Auto-generate ObjectId
+        _id: new mongoose.Types.ObjectId(),
         type: q.type,
         title: q.title,
         solution: q.solution || "",
@@ -105,7 +103,7 @@ async function insertQuestions(call, callback) {
   }
 }
 
-// Start the gRPC server with increased message size limits
+// Starting gRPC server with increased msg size limits
 const server = new grpc.Server({
   "grpc.max_send_message_length": 1024 * 1024 * 100, // 100 MB
   "grpc.max_receive_message_length": 1024 * 1024 * 100, // 100 MB
@@ -115,8 +113,11 @@ server.addService(questionsProto.QuestionService.service, {
   insertQuestions,
   searchQuestions
 });
-server.addService(authProto.service, { Register: register, Login: login });
-// Bind the server to port and start
+server.addService(authProto.service, 
+{ Register: register,
+   Login: login
+ });
+
 const PORT = process.env.GRPC_PORT || "50052";
 server.bindAsync(
   `0.0.0.0:${PORT}`,
@@ -127,6 +128,6 @@ server.bindAsync(
       return;
     }
     console.log(`gRPC server running on port ${bindPort}`);
-    server.start(); // Start the server after binding to the port
+    // server.start(); // Start the server after binding to the port
   }
 );

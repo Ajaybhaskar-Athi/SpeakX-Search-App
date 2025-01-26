@@ -1,17 +1,16 @@
 const mongoose = require('mongoose');
-require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config(); 
 const fs = require('fs');
-const Question = require("../models/questions");// Require the Question model
+const Question = require("../models/questions");
 
-// Get MongoDB URI from the environment variables
+
 const dbUri = process.env.SpeakXDB2;
 
 if (!dbUri) {
   console.error('MongoDB URI is not defined in the environment variables');
-  process.exit(1); // Exit the application if URI is not defined
+  process.exit(1); 
 }
 
-// Connect to MongoDB using the URI
 mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('MongoDB connected successfully');
@@ -20,7 +19,8 @@ mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
     console.error('MongoDB connection error:', err);
   });
 
-// Function to split array into chunks
+// fun for spliting array into chunks
+
 function chunkArray(arr, chunkSize) {
   const chunks = [];
   for (let i = 0; i < arr.length; i += chunkSize) {
@@ -29,11 +29,11 @@ function chunkArray(arr, chunkSize) {
   return chunks;
 }
 
-// Function to insert data in chunks
+
 async function insertChunks(chunks) {
   for (let chunk of chunks) {
     try {
-      // Insert the chunk into the database (using Question model's insertMany)
+//this chunk consists more then 1 document
       await Question.insertMany(chunk);
       console.log(`Inserted chunk of size ${chunk.length} successfully`);
     } catch (err) {
@@ -42,8 +42,7 @@ async function insertChunks(chunks) {
   }
 }
 
-// Read data from the file
-const filePath = 'questions_transformed.json'; // Replace with your file path
+const filePath = 'questions_transformed.json'; 
 
 fs.readFile(filePath, 'utf8', async (err, data) => {
   if (err) {
@@ -51,10 +50,10 @@ fs.readFile(filePath, 'utf8', async (err, data) => {
     return;
   }
 
-  let questions = JSON.parse(data); // Assuming the file contains a valid JSON array
-  let chunkSize = 1000; // Define your chunk size (feel free to adjust)
+  let questions = JSON.parse(data); 
+  let chunkSize = 1000; 
   let chunks = chunkArray(questions, chunkSize); // Split data into chunks
 
-  // Start inserting data in chunks
+  // insert data in chunks
   await insertChunks(chunks);
 });

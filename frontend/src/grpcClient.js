@@ -2,7 +2,7 @@ import { QuestionServiceClient } from './grpc/QuestionsServiceClientPb';  // Imp
 // import { GetQuestionsRequest } from './grpc/questions_pb';  // Import request class
 // import { SearchQuestionsRequest } from './grpc/questions_pb';  
 import * as grpcWeb from 'grpc-web';
-import { SearchQuestionsRequest, SearchQuestionsResponse } from './grpc/questions_pb';
+import { SearchQuestionsRequest} from './grpc/questions_pb';
 
 
 const client = new QuestionServiceClient('http://localhost:8081'); // gRPC-Web server URL

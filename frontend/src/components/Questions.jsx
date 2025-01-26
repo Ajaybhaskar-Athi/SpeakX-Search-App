@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getQuestions } from './grpcClient';
+import { getQuestions } from '../grpcClient';
 
 const Questions = () => {
   const [questions, setQuestions] = useState([]);
@@ -8,17 +8,14 @@ const Questions = () => {
   const [query, setQuery] = useState('');
   const [pageSize] = useState(10);  // Number of questions per page
 
-  // Function to handle pagination change
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
 
-  // Function to handle search query change
   const handleSearchChange = (event) => {
     setQuery(event.target.value);
   };
 
-  // Fetch questions whenever page or search query changes
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -31,6 +28,7 @@ const Questions = () => {
     };
     fetchQuestions();
   }, [query, page, pageSize]);
+  console.log(questions);
 
   return (
     <div>

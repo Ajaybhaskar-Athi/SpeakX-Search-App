@@ -1,9 +1,7 @@
 import { AuthServiceClient } from './grpc/AuthServiceClientPb';
 
-import { LoginRequest, RegisterRequest } from './grpc/auth_pb.js';
+import { LoginRequest, RegisterRequest } from './grpc/auth_pb';
 
-// import { AuthServiceClient } from './grpc/auth_grpc_web_pb';
-// import { LoginRequest, RegisterRequest } from './grpc/auth_pb';
 
 
 
